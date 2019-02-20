@@ -5,6 +5,7 @@ import { URL_SERVICIOS } from '../../config/config';
 
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,8 @@ export class UsuarioService {
 
   constructor(
     public http: HttpClient,
-    public router: Router
+    public router: Router,
+    public _subirArchivoService: SubirArchivoService
     ) {
     console.log('Servicio de usuario listo');
     this.cargarStorage();
@@ -99,5 +101,42 @@ export class UsuarioService {
                       return respuesta.usuario;
                     }));
    }
+
+   actualizarUsuario(usuario: Usuario) {
+
+    let url = URL_SERVICIOS + '/usuarios/' + usuario._id;
+    url += '?token=' + this.token;
+    // console.log(url);
+
+    return this.http.put(url, usuario)
+                    .pipe(map((respuesta: any) => {
+
+                      const userDB: Usuario = respuesta.usuario;
+
+                      this.guardarStorage(userDB._id, this.token, userDB);
+                      swal('Usuario Actualizado', usuario.nombre, 'success');
+
+                      return true;
+
+                    }));
+
+   }
+
+   cambiarImagen( archivo: File, id: string ) {
+
+    this._subirArchivoService.subirArchivo(archivo, 'usuarios', id)
+            .then((respuesta: any) => {
+              this.usuario.img = respuesta.usuario.img;
+              swal('Imagen Actualizada', this.usuario.nombre, 'success');
+
+              this.guardarStorage(id, this.token, this.usuario);
+
+            })
+            .catch(respuesta => {
+              console.error(respuesta);
+            });
+
+   }
+
 
 }
