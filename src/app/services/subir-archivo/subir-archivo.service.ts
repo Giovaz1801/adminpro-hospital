@@ -28,21 +28,16 @@ subirArchivo( archivo: File, tipo: string, id: string) {
           console.error('Falló la subida');
           reject(xhr.response);
         }
-
       }
-
     };
 
     const url = URL_SERVICIOS + '/upload/' + tipo + '/' + id ;
+    console.log(url);
 
     xhr.open('PUT', url, true);
     xhr.send(formData);
 
   });
 
-
-
 }
-
-
 }

@@ -35,9 +35,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   cargarUsuarios() {
-
     this.cargando = true;
-
     this._usuarioService.cargarUsuarios(this.desde)
                 .subscribe((respuesta: any) => {
                   // console.log(respuesta);
@@ -48,32 +46,24 @@ export class UsuariosComponent implements OnInit {
   }
 
   cambiarDesde(valor: number) {
-
     const desde = this.desde + valor;
     console.log(desde);
-
     if (desde >= this.totalRegistros) {
       return;
     }
-
     if (desde < 0) {
       return;
     }
-
     this.desde += valor;
     this.cargarUsuarios();
-
   }
 
   buscarUsuario(termino: string) {
-
     if ( termino.length <= 0 ) {
       this.cargarUsuarios();
       return;
     }
-
     this.cargando = true;
-
     this._usuarioService.buscarUsuario(termino)
           .subscribe( (usuarios: Usuario[]) => {
             this.usuarios = usuarios;

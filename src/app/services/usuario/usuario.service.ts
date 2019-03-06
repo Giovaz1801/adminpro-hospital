@@ -20,7 +20,7 @@ export class UsuarioService {
     public router: Router,
     public _subirArchivoService: SubirArchivoService
     ) {
-    console.log('Servicio de usuario listo');
+    // console.log('Servicio de usuario listo');
     this.cargarStorage();
    }
 
@@ -55,7 +55,6 @@ export class UsuarioService {
 
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
-
     this.router.navigate(['/login']);
 
    }
@@ -63,15 +62,12 @@ export class UsuarioService {
    loginGoogle(token: string) {
 
     const url = URL_SERVICIOS + '/login/google';
-
     return this.http.post(url, { token })
                   .pipe(map((respuesta: any) => {
 
                     this.guardarStorage(respuesta.id, respuesta.token, respuesta.usuario);
                     return true;
                   }));
-
-
    }
 
    login(usuario: Usuario, recordar: boolean = true ) {
@@ -90,7 +86,6 @@ export class UsuarioService {
                         return true;
 
                       }));
-
    }
 
    crearUsuario(usuario: Usuario) {
@@ -139,11 +134,8 @@ export class UsuarioService {
    }
 
    cargarUsuarios(desde: number = 0) {
-
     const url = URL_SERVICIOS + '/usuario?desde=' + desde;
-
     return this.http.get(url);
-
    }
 
    buscarUsuario(termino: string) {
