@@ -1,7 +1,7 @@
 import { RouterModule, Routes } from '@angular/router';
 
 // GUARDS
-import { LoginGuardGuard } from '../services/service.index';
+import { LoginGuardGuard, VerificaTokenGuard } from '../services/service.index';
 import { AdminGuard } from '../services/service.index';
 
 import { PagesComponent } from './pages.component';
@@ -19,12 +19,12 @@ import { MedicoComponent } from './medicos/medico.component';
 import { BusquedaComponent } from './busqueda/busqueda.component' ;
 
 const pagesRoutes: Routes = [
-    {
-        path: '',
-        component: PagesComponent,
-        canActivate: [ LoginGuardGuard ],
-        children: [
-            {path: 'dashboard', component: DashboardComponent, data: { titulo: 'Dashboard'} },
+            {
+                path: 'dashboard',
+                component: DashboardComponent,
+                canActivate: [ VerificaTokenGuard ], // este de puede implementar en cualquier página
+                data: { titulo: 'Dashboard'}
+            },
             {path: 'progress', component: ProgressComponent, data: { titulo: 'Progress'}},
             {path: 'graficas1', component: Graficas1Component, data: { titulo: 'Gráficas'}},
             {path: 'promesas', component: PromesasComponent, data: { titulo: 'Promesas'}},
@@ -40,11 +40,24 @@ const pagesRoutes: Routes = [
                 data: { titulo: 'Mentenimiento de Usuarios'}
             },
 
-            {path: 'hospitales', component: HospitalesComponent, data: { titulo: 'Mentenimiento de Hospitales'}},
-            {path: 'medicos', component: MedicosComponent, data: { titulo: 'Mentenimiento de Médicos'}},
-            {path: 'medico/:id', component: MedicoComponent, data: { titulo: 'Actualizar Médico'}},
+            {
+                path: 'hospitales',
+                component: HospitalesComponent,
+                canActivate: [ VerificaTokenGuard ],
+                data: { titulo: 'Mentenimiento de Hospitales'}
+            },
+            {
+                path: 'medicos',
+                component: MedicosComponent,
+                canActivate: [ VerificaTokenGuard ],
+                data: { titulo: 'Mentenimiento de Médicos'}
+            },
+            {
+                path: 'medico/:id',
+                component: MedicoComponent,
+                canActivate: [ VerificaTokenGuard ],
+                data: { titulo: 'Actualizar Médico'}
+            },
             {path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-        ]
-    }
 ];
 export const PAGES_ROUTES = RouterModule.forChild( pagesRoutes );
